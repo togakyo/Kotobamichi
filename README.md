@@ -9,8 +9,7 @@
 A small puzzle game for children — draw paths with your finger to guide wandering creatures home.  
 It runs as a single static HTML file, so you can publish it directly on GitHub Pages.
 
-**▶ Play:** `https://<your-username>.github.io/kotobamichi/`  
-*(Replace the URL above with your own after publishing)*
+**▶ Play:** https://togakyo.github.io/Kotobamichi/
 
 ### How to Play
 
@@ -65,8 +64,7 @@ MIT License. Free to modify and redistribute. See [LICENSE](LICENSE) for details
 歩き続けるいきものを、ゆびで描いた道でおうちへ導く、子ども向けの小さなパズルゲーム。  
 1ファイルだけで動く静的サイトなので、GitHub Pages にそのまま公開できます。
 
-**▶ あそぶ:** `https://<あなたのユーザー名>.github.io/kotobamichi/`  
-*(公開後、上のURLを自分のものに書き換えてください)*
+**▶ あそぶ:** https://togakyo.github.io/Kotobamichi/
 
 ### あそびかた
 
