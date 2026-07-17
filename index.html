@@ -12,83 +12,84 @@
     --paper:#f6efe0; --ink:#3a3340;
     --coral:#ff8a5c; --grass:#7fbf6a; --soil:#caa06a;
     --ice:#5cc4ea; --grape:#a06cff; --gold:#ffce5c;
-    --card:#fffdf6;
+    --card:#fffdf6; --line:#eadfc6;
     --font:"M PLUS Rounded 1c","Hiragino Maru Gothic ProN",system-ui,sans-serif;
-    --shadow:0 14px 32px rgba(60,45,40,.22);
+    --sh-lift:0 12px 28px rgba(60,45,40,.16);
+    --sh-btn:0 3px 0 rgba(60,45,40,.14);
   }
   *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html,body{ margin:0; height:100%; }
-  body{ font-family:var(--font); color:var(--ink); background:radial-gradient(900px 500px at 50% -10%,#fff8ec 0%,transparent 60%),#e7dcc6; min-height:100%; display:flex; flex-direction:column; align-items:center; padding:12px 10px 24px; overflow-x:hidden; }
-  .top{ width:100%; max-width:1000px; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; padding:0 2px; margin-bottom:8px; }
-  .brand{ display:flex; align-items:baseline; gap:.4em; }
-  .brand b{ font-weight:800; font-size:clamp(20px,5vw,28px); letter-spacing:.02em; }
-  .brand small{ font-weight:500; opacity:.6; font-size:clamp(11px,2.6vw,13px); }
-  .top-right{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-  .pill{ background:var(--card); border:1px solid #e6dcc4; border-radius:999px; padding:6px 12px; font-weight:800; font-size:14px; display:flex; align-items:center; gap:.35em; box-shadow:0 2px 0 rgba(60,45,40,.08); white-space:nowrap; }
-  .pill .lbl{ font-weight:600; opacity:.6; font-size:12px; }
-  .counters{ display:flex; gap:8px; }
-  .lang-btn{ border:none; cursor:pointer; font-family:var(--font); font-weight:800; font-size:13px; background:var(--card); border:1px solid #e6dcc4; border-radius:999px; padding:6px 12px; box-shadow:0 2px 0 rgba(60,45,40,.08); }
-  .rules{ width:100%; max-width:1000px; display:flex; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
-  .rulecard{ flex:1 1 200px; background:var(--card); border:2px solid #ece1c8; border-radius:16px; padding:9px 12px; display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow:0 3px 0 rgba(60,45,40,.10); cursor:pointer; transition:transform .08s; min-width:0; }
-  .rulecard:active{ transform:translateY(2px); }
-  .rulecard .sentence{ font-weight:700; font-size:clamp(13px,3.2vw,16px); display:flex; align-items:center; gap:.3em; flex-wrap:wrap; }
-  .rulecard .word{ background:var(--gold); color:#5a4015; border-radius:9px; padding:2px 10px; font-weight:800; box-shadow:0 2px 0 rgba(120,90,20,.25); }
-  .rulecard .word.ice{ background:var(--ice); color:#0a3a4d; box-shadow:0 2px 0 rgba(10,70,90,.25); }
-  .rulecard .flip{ font-size:11px; font-weight:700; opacity:.5; white-space:nowrap; }
-  .stage{ width:100%; max-width:1000px; background:linear-gradient(180deg,#fffaf0,#efe6d2); border-radius:22px; padding:10px; box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.7); position:relative; }
-  .canvas-wrap{ position:relative; border-radius:16px; overflow:hidden; line-height:0; box-shadow:inset 0 0 0 2px rgba(60,45,40,.06); }
+  body{ font-family:var(--font); color:var(--ink); background:radial-gradient(900px 500px at 50% -10%,#fff9ee 0%,transparent 60%),#ebe1cb; min-height:100%; display:flex; flex-direction:column; align-items:center; padding:14px 12px 28px; overflow-x:hidden; }
+  .wrap{ width:100%; max-width:960px; display:flex; flex-direction:column; gap:10px; }
+  .top{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:0 2px; }
+  .brand{ display:flex; align-items:baseline; gap:.45em; min-width:0; }
+  .brand b{ font-weight:800; font-size:clamp(20px,5vw,26px); letter-spacing:.02em; }
+  .brand small{ font-weight:500; opacity:.55; font-size:clamp(11px,2.5vw,13px); }
+  .top-right{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .pill{ background:var(--card); border:1px solid var(--line); border-radius:999px; padding:5px 12px; font-weight:700; font-size:13px; display:flex; align-items:center; gap:.4em; white-space:nowrap; }
+  .pill b{ font-weight:800; }
+  .pill .sep{ width:1px; height:12px; background:var(--line); margin:0 .2em; }
+  .icon-btn{ border:1px solid var(--line); cursor:pointer; font-family:var(--font); font-weight:800; font-size:12px; color:var(--ink); background:var(--card); border-radius:999px; height:30px; padding:0 11px; }
+  .rules{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+  .rulecard{ display:inline-flex; align-items:center; gap:8px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:6px 10px 6px 14px; cursor:pointer; transition:transform .08s; }
+  .rulecard:active{ transform:scale(.97); }
+  .rulecard .sentence{ font-weight:700; font-size:13px; display:flex; align-items:center; gap:.35em; white-space:nowrap; }
+  .rulecard .word{ background:var(--gold); color:#5a4015; border-radius:999px; padding:2px 10px; font-weight:800; }
+  .rulecard .word.ice{ background:var(--ice); color:#0a3a4d; }
+  .rulecard .flip{ font-weight:800; opacity:.35; }
+  .stage{ background:linear-gradient(180deg,#fffaf0,#f0e7d3); border-radius:20px; padding:10px 10px 6px; box-shadow:var(--sh-lift),inset 0 1px 0 rgba(255,255,255,.7); position:relative; }
+  .canvas-wrap{ position:relative; border-radius:14px; overflow:hidden; line-height:0; box-shadow:inset 0 0 0 2px rgba(60,45,40,.05); }
   canvas{ width:100%; height:auto; display:block; touch-action:none; cursor:crosshair; }
-  .toast{ position:absolute; left:50%; top:12px; transform:translateX(-50%); background:rgba(58,51,64,.92); color:#fff; padding:7px 16px; border-radius:999px; font-weight:800; font-size:14px; pointer-events:none; opacity:0; transition:opacity .35s; white-space:nowrap; max-width:92%; }
+  .toast{ position:absolute; left:50%; top:12px; transform:translateX(-50%); background:rgba(58,51,64,.92); color:#fff; padding:7px 16px; border-radius:999px; font-weight:800; font-size:14px; pointer-events:none; opacity:0; transition:opacity .35s; white-space:nowrap; max-width:92%; overflow:hidden; text-overflow:ellipsis; }
   .toast.show{ opacity:1; }
   .banner{ position:absolute; inset:0; display:none; align-items:center; justify-content:center; flex-direction:column; gap:12px; background:rgba(255,250,240,.86); backdrop-filter:blur(2px); }
   .banner.show{ display:flex; }
   .banner h2{ margin:0; font-size:clamp(26px,7vw,44px); font-weight:800; color:var(--coral); }
-  .banner .sub{ font-weight:700; opacity:.7; }
+  .banner .sub{ font-weight:700; opacity:.75; }
   .bbtn{ font-family:var(--font); font-weight:800; font-size:18px; border:none; cursor:pointer; background:var(--coral); color:#fff; border-radius:16px; padding:12px 26px; box-shadow:0 5px 0 #d9683e; }
   .bbtn:active{ transform:translateY(3px); box-shadow:0 2px 0 #d9683e; }
   .share-btn{ background:var(--ice) !important; color:#003a4d !important; box-shadow:0 4px 0 #3a9cb8 !important; font-size:15px !important; }
-  .inkrow{ width:100%; max-width:1000px; display:flex; align-items:center; gap:10px; margin-top:10px; }
-  .inkrow .ink-label{ font-weight:800; font-size:13px; white-space:nowrap; }
-  .inkbar{ flex:1; height:14px; background:#e6dcc4; border-radius:999px; overflow:hidden; box-shadow:inset 0 1px 2px rgba(60,45,40,.18); }
-  .inkfill{ height:100%; width:100%; background:linear-gradient(90deg,#7fbf6a,#bfe07a); transition:width .12s; }
-  .palette{ width:100%; max-width:1000px; margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
-  .mat{ border:none; cursor:pointer; font-family:var(--font); background:var(--card); border-radius:16px; width:86px; height:68px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; box-shadow:0 4px 0 rgba(60,45,40,.16); outline:3px solid transparent; outline-offset:2px; transition:transform .08s,outline-color .12s; padding:4px; border:2px solid transparent; }
-  .mat .emo{ font-size:21px; line-height:1; }
-  .mat .lbl{ font-size:12px; font-weight:800; }
-  .mat .desc{ font-size:10px; font-weight:600; opacity:.55; }
-  .mat:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(60,45,40,.16); }
+  .inkrow{ display:flex; align-items:center; gap:8px; padding:8px 6px 4px; }
+  .inkrow .ink-label{ font-size:13px; }
+  .inkbar{ flex:1; height:10px; background:#e3d8bf; border-radius:999px; overflow:hidden; }
+  .inkfill{ height:100%; width:100%; background:linear-gradient(90deg,#7fbf6a,#bfe07a); border-radius:999px; transition:width .12s; }
+  .palette{ display:flex; gap:6px; flex-wrap:wrap; justify-content:center; }
+  .mat{ border:none; cursor:pointer; font-family:var(--font); background:var(--card); border-radius:14px; width:74px; height:58px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; box-shadow:var(--sh-btn); outline:3px solid transparent; outline-offset:1px; transition:transform .08s,outline-color .12s; }
+  .mat .emo{ font-size:20px; line-height:1; }
+  .mat .lbl{ font-size:11.5px; font-weight:800; line-height:1; display:flex; align-items:center; }
+  .mat:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(60,45,40,.14); }
   .mat[aria-pressed="true"]{ outline-color:var(--coral); }
-  .mat.cmd{ border-color:var(--coral); }
-  .mat.tool{ background:#f1ead9; width:66px; }
-  .controls{ width:100%; max-width:1000px; margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap; align-items:center; }
-  .btn{ border:none; cursor:pointer; font-family:var(--font); font-weight:800; border-radius:14px; padding:11px 18px; font-size:15px; display:flex; align-items:center; gap:.4em; box-shadow:0 4px 0 rgba(60,45,40,.18); transition:transform .08s; }
-  .btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(60,45,40,.18); }
+  .mat.cmd .lbl::after{ content:""; width:5px; height:5px; border-radius:50%; background:var(--coral); margin-left:4px; }
+  .mat.tool{ background:#f2ecdc; width:56px; }
+  .controls{ display:flex; gap:8px; justify-content:center; flex-wrap:wrap; align-items:center; }
+  .btn{ border:none; cursor:pointer; font-family:var(--font); font-weight:800; border-radius:14px; padding:10px 18px; font-size:15px; display:flex; align-items:center; gap:.4em; box-shadow:var(--sh-btn); transition:transform .08s; }
+  .btn:active{ transform:translateY(2px); box-shadow:0 1px 0 rgba(60,45,40,.18); }
   .btn.go{ background:var(--grass); color:#1c3a12; box-shadow:0 4px 0 #5d9c4b; }
   .btn.ghost{ background:var(--card); color:var(--ink); }
-  .levels{ display:flex; gap:5px; }
-  .lvl{ width:36px; height:40px; border-radius:12px; border:none; cursor:pointer; font-family:var(--font); font-weight:800; font-size:15px; background:var(--card); box-shadow:0 3px 0 rgba(60,45,40,.16); }
+  .seg{ display:flex; gap:2px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:3px; }
+  .lvl{ width:32px; height:36px; border-radius:9px; border:none; cursor:pointer; font-family:var(--font); font-weight:800; font-size:14px; background:transparent; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; line-height:1; }
+  .lvl .st{ font-size:7px; line-height:1; height:7px; color:#c9862a; letter-spacing:-1px; }
   .lvl[aria-pressed="true"]{ background:var(--gold); }
-  .daily-btn{ border:none; cursor:pointer; font-family:var(--font); font-weight:800; font-size:13px; background:var(--card); border-radius:12px; padding:9px 14px; box-shadow:0 3px 0 rgba(60,45,40,.16); }
-  .daily-btn.active{ background:var(--coral); color:#fff; box-shadow:0 3px 0 #d9683e; }
-  .foot{ margin-top:14px; opacity:.55; font-size:12px; font-weight:500; text-align:center; max-width:640px; line-height:1.7; }
-  @media(max-width:520px){ .mat{ width:76px; height:62px; } .mat .emo{ font-size:18px; } .mat.tool{ width:58px; } }
+  .daily-btn{ border:1px solid var(--line); cursor:pointer; font-family:var(--font); font-weight:800; font-size:13px; color:var(--ink); background:var(--card); border-radius:12px; height:44px; padding:0 14px; }
+  .daily-btn.active{ background:var(--coral); border-color:var(--coral); color:#fff; }
+  .help{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:10px 16px; font-size:12.5px; font-weight:500; line-height:1.9; opacity:.9; max-width:680px; margin:2px auto 0; }
+  .help[hidden]{ display:none; }
+  @media(max-width:520px){ .mat{ width:66px; height:54px; } .mat .emo{ font-size:18px; } .mat.tool{ width:50px; } .brand small{ display:none; } }
 </style>
 </head>
 <body>
-<div class="top">
+<div class="wrap">
+<header class="top">
   <div class="brand">
     <b>✏️ ことばみち</b>
     <small id="brandSub">せんを ひいて、みんなを おうちへ</small>
   </div>
   <div class="top-right">
-    <button class="lang-btn" id="langBtn">🌐 EN</button>
-    <div class="counters">
-      <div class="pill" id="dayPill" style="display:none">📅 Day <span id="dayNum">0</span></div>
-      <div class="pill"><span class="lbl" id="lblArrived">とどいた</span> <span id="homeN">0</span>/<span id="goalN">0</span></div>
-      <div class="pill"><span class="lbl" id="lblFell">おちた</span> <span id="lostN">0</span></div>
-    </div>
+    <div class="pill" id="dayPill" style="display:none">📅 <b id="dayNum">0</b><span id="streakPill" style="display:none">🔥<b id="streakN">0</b></span></div>
+    <div class="pill">🏠 <b id="homeN">0</b>/<b id="goalN">0</b><span class="sep"></span>😵 <b id="lostN">0</b></div>
+    <button class="icon-btn" id="langBtn">EN</button>
   </div>
-</div>
+</header>
 
 <div class="rules" id="rules"></div>
 
@@ -103,23 +104,24 @@
       <button class="bbtn share-btn" id="shareBtn" style="display:none">📋 Share</button>
     </div>
   </div>
-</div>
-
-<div class="inkrow">
-  <span class="ink-label" id="inkLabel">🖊 インク</span>
-  <div class="inkbar"><div class="inkfill" id="inkfill"></div></div>
+  <div class="inkrow">
+    <span class="ink-label">🖊</span>
+    <div class="inkbar"><div class="inkfill" id="inkfill"></div></div>
+  </div>
 </div>
 
 <div class="palette" id="palette"></div>
 
 <div class="controls">
   <button class="btn go" id="startBtn">▶ スタート</button>
-  <button class="btn ghost" id="resetBtn">🔄 やりなおす</button>
-  <div class="levels" id="levels"></div>
+  <button class="btn ghost" id="resetBtn" title="Reset">🔄</button>
+  <div class="seg" id="levels"></div>
   <button class="daily-btn" id="dailyBtn">📅 デイリー</button>
+  <button class="icon-btn" id="helpBtn" style="height:44px;border-radius:12px;font-size:14px;">？</button>
 </div>
 
-<p class="foot" id="footer"></p>
+<div class="help" id="footer" hidden></div>
+</div>
 
 <script>
 (() => {
@@ -141,6 +143,7 @@ const MATS=[
   {id:'ice',    emo:'🧊', ja:'つるつる', en:'Ice',    dja:'すべる',      den:'slippery', col:'#5cc4ea', cmd:false},
   {id:'bounce', emo:'🌀', ja:'ぽよん',   en:'Spring', dja:'はねる',      den:'bouncy',   col:'#a06cff', cmd:false},
   {id:'turn',   emo:'↩',  ja:'もどれ',   en:'Turn',   dja:'むきをかえる',den:'reverses', col:'#ff8a5c', cmd:true},
+  {id:'jump',   emo:'⤴',  ja:'とべ',     en:'Jump',   dja:'ジャンプする',den:'jumps',    col:'#2e9e6b', cmd:true},
   {id:'fast',   emo:'⚡', ja:'はやく',   en:'Fast',   dja:'はやくなる',  den:'speeds up',col:'#b8920a', cmd:true},
 ];
 let curMat='normal';
@@ -176,18 +179,61 @@ const LEVELS=[
 ];
 let li=0,level=LEVELS[0];
 
+// ── Save ──────────────────────────────────────────────────────────
+const save=(()=>{try{return JSON.parse(localStorage.getItem('ktm-save')||'{}')}catch(e){return{}}})();
+save.stars=save.stars||{};
+save.daily=save.daily||{last:-99,streak:0};
+function persist(){try{localStorage.setItem('ktm-save',JSON.stringify(save))}catch(e){}}
+function calcStars(){return home>=level.total?3:home>=Math.ceil((level.goal+level.total)/2)?2:1;}
+
 // ── Daily ─────────────────────────────────────────────────────────
 const DAY_ORIGIN=new Date('2026-06-26').getTime();
 function getDayNum(){ return Math.max(0,Math.floor((Date.now()-DAY_ORIGIN)/86400000)); }
 let dailyMode=false;
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+// A new solvable-by-drawing layout every day, from the day number alone.
+function genDaily(n){
+  const rnd=mulberry32(((n+1)*2654435761)>>>0);
+  const ly=250+Math.floor(rnd()*160), lw=170+Math.floor(rnd()*90);
+  const ry=210+Math.floor(rnd()*240), rx=760+Math.floor(rnd()*80);
+  const plats=[
+    {x:-20,y:ly,w:lw+20,h:H-ly+20,g:true},
+    {x:rx,y:ry,w:W-rx+20,h:H-ry+20,g:true},
+  ];
+  const nMid=1+Math.floor(rnd()*3),span=rx-lw;
+  for(let i=0;i<nMid;i++){
+    const mw=90+Math.floor(rnd()*90);
+    const mx=lw+40+Math.floor((span-200)*(i+rnd()*0.7)/nMid);
+    const my=150+Math.floor(rnd()*300);
+    plats.push({x:mx,y:my,w:mw,h:18+Math.floor(rnd()*30),g:true});
+  }
+  const total=10+Math.floor(rnd()*5);
+  return { ja:'デイリー #'+n, en:'Daily #'+n, dir:1,
+    total, goal:Math.max(5,Math.round(total*0.65)), ink:1500+Math.floor(rnd()*1100),
+    spawn:{x:60,y:ly-28},
+    goalRect:{x:Math.min(rx+30,W-116),y:ry-64,w:96,h:60},
+    plats };
+}
 
 // ── State ─────────────────────────────────────────────────────────
 let strokes=[],creatures=[],particles=[],inkUsed=0;
 let running=false,spawned=0,spawnT=0,home=0,lost=0,won=false,gt=0;
 
 // ── Level management ──────────────────────────────────────────────
-function loadLevel(i){
-  li=i; level=LEVELS[i];
+function loadLevel(i){ applyLevel(LEVELS[i],i); }
+function loadDaily(){
+  const n=getDayNum();
+  document.getElementById('dayNum').textContent=n;
+  updateStreakPill();
+  applyLevel(genDaily(n),-1);
+}
+function updateStreakPill(){
+  const on=save.daily.streak>0&&save.daily.last>=getDayNum()-1;
+  document.getElementById('streakPill').style.display=on?'':'none';
+  document.getElementById('streakN').textContent=save.daily.streak;
+}
+function applyLevel(L,i){
+  li=i; level=L;
   rules.dir=level.dir; rules.grav='normal';
   strokes=[]; creatures=[]; particles=[]; inkUsed=0;
   running=false; spawned=0; spawnT=0; home=0; lost=0; won=false;
@@ -212,14 +258,14 @@ function syncStartBtn(){
 function renderRules(){
   const el=document.getElementById('rules'); el.innerHTML='';
   const a=document.createElement('div'); a.className='rulecard';
-  a.innerHTML=`<div class="sentence">${t('みんなは','Everyone')} <span class="word" id="wDir">${rules.dir>0?t('みぎ ▶','Right ▶'):t('◀ ひだり','◀ Left')}</span> ${t('に あるく','walks')}</div><div class="flip">${t('タップで ぎゃく','tap to flip')}</div>`;
+  a.innerHTML=`<div class="sentence">${t('みんなは','Everyone')} <span class="word" id="wDir">${rules.dir>0?t('みぎ ▶','Right ▶'):t('◀ ひだり','◀ Left')}</span> ${t('に あるく','walks')}</div><span class="flip">↻</span>`;
   a.addEventListener('click',()=>{
     rules.dir*=-1; for(const c of creatures)c.dir=rules.dir;
     document.getElementById('wDir').textContent=rules.dir>0?t('みぎ ▶','Right ▶'):t('◀ ひだり','◀ Left');
     toast(t('むきが かわった！','Direction flipped!')); blip(rules.dir>0?520:300);
   });
   const b=document.createElement('div'); b.className='rulecard';
-  b.innerHTML=`<div class="sentence">${t('おもさは','Gravity is')} <span class="word${rules.grav==='float'?' ice':''}" id="wGrav">${rules.grav==='float'?t('ふわっ','Floaty'):t('ふつう','Normal')}</span></div><div class="flip">${t('タップで きりかえ','tap to switch')}</div>`;
+  b.innerHTML=`<div class="sentence">${t('おもさは','Gravity is')} <span class="word${rules.grav==='float'?' ice':''}" id="wGrav">${rules.grav==='float'?t('ふわっ','Floaty'):t('ふつう','Normal')}</span></div><span class="flip">↻</span>`;
   b.addEventListener('click',()=>{
     rules.grav=rules.grav==='normal'?'float':'normal';
     const w=document.getElementById('wGrav');
@@ -237,7 +283,8 @@ function buildPalette(){
     const b=document.createElement('button');
     b.className='mat'+(m.cmd?' cmd':''); b.type='button'; b.dataset.id=m.id;
     b.setAttribute('aria-pressed',m.id===curMat);
-    b.innerHTML=`<span class="emo">${m.emo}</span><span class="lbl">${t(m.ja,m.en)}</span><span class="desc">${t(m.dja,m.den)}</span>`;
+    b.innerHTML=`<span class="emo">${m.emo}</span><span class="lbl">${t(m.ja,m.en)}</span>`;
+    b.title=t(m.dja,m.den);
     b.addEventListener('click',()=>{
       curMat=m.id;
       el.querySelectorAll('.mat:not(.tool)').forEach(x=>x.setAttribute('aria-pressed',x.dataset.id===curMat));
@@ -280,7 +327,7 @@ const COLORS=['#ff8a5c','#ffd166','#7fc7ff','#9ad36a','#ff9fd0','#c4a0ff'];
 function spawnOne(){
   creatures.push({x:level.spawn.x,y:level.spawn.y,vx:rules.dir*WALK,vy:0,dir:rules.dir,
     col:COLORS[spawned%COLORS.length],step:Math.random()*6.28,ground:false,
-    turnCD:0,boostTimer:0});
+    turnCD:0,jumpCD:0,boostTimer:0});
   spawned++;
 }
 
@@ -296,6 +343,7 @@ function physics(dt){
   const SUB=3,s=dt/SUB;
   for(const c of creatures){
     if(c.turnCD>0)c.turnCD-=dt;
+    if(c.jumpCD>0)c.jumpCD-=dt;
     if(c.boostTimer>0)c.boostTimer-=dt;
     for(let k=0;k<SUB;k++){
       c.vy+=g*s; c.vy=clamp(c.vy,-600,600); c.vx=clamp(c.vx,-600,600);
@@ -327,6 +375,11 @@ function physics(dt){
               c.dir*=-1; c.vx*=-0.4; c.turnCD=0.7;
               if(k===0)wordPop(c.x,c.y,t('もどれ！','Turn!'));
               blip(420);
+            }
+            if(st.mat==='jump'&&c.jumpCD<=0){
+              c.vy=rules.grav==='float'?-300:-460; c.jumpCD=0.55;
+              if(k===0)wordPop(c.x,c.y,t('とべ！','Jump!'));
+              blip(560);
             }
             if(st.mat==='fast'){
               const was=c.boostTimer>0; c.boostTimer=0.25;
@@ -455,9 +508,22 @@ function showBanner(win){
   banner.classList.add('show');
   const shareBtn=document.getElementById('shareBtn');
   if(win){
+    const stars=calcStars();
+    let extra='';
+    if(dailyMode){
+      const n=getDayNum();
+      if(save.daily.last!==n){
+        save.daily.streak=(save.daily.last===n-1)?save.daily.streak+1:1;
+        save.daily.last=n;
+      }
+      persist();updateStreakPill();
+      extra=' · 🔥'+save.daily.streak+t('にち れんぞく',' day streak');
+    }else if(li>=0&&stars>(save.stars[li]|0)){
+      save.stars[li]=stars;persist();updateLevelStars();
+    }
     document.getElementById('bannerTitle').textContent=t('クリア！🎉','Clear! 🎉');
-    document.getElementById('bannerSub').textContent=home+t('ひき とどいた',' delivered');
-    document.getElementById('bannerBtn').textContent=li<LEVELS.length-1?t('つぎへ ▶','Next ▶'):t('もういちど ↻','Play again ↻');
+    document.getElementById('bannerSub').textContent='★'.repeat(stars)+'☆'.repeat(3-stars)+'  '+home+t('ひき とどいた',' delivered')+extra;
+    document.getElementById('bannerBtn').textContent=!dailyMode&&li>=0&&li<LEVELS.length-1?t('つぎへ ▶','Next ▶'):t('もういちど ↻','Play again ↻');
     if(dailyMode)shareBtn.style.display='';
     blip(660);setTimeout(()=>blip(880),120);
   }else{
@@ -468,11 +534,12 @@ function showBanner(win){
   }
 }
 document.getElementById('bannerBtn').addEventListener('click',()=>{
-  if(won&&li<LEVELS.length-1)loadLevel(li+1); else resetAttempt();
+  if(won&&!dailyMode&&li>=0&&li<LEVELS.length-1)loadLevel(li+1); else resetAttempt();
 });
 document.getElementById('shareBtn').addEventListener('click',()=>{
-  const n=getDayNum();
-  const txt=`✏️ ことばみち · Kotobamichi  Day ${n}\n🐾 ${home}/${level.goal} ${t('とどいた','delivered')}  🖊 ${Math.round(inkUsed)} ink\nhttps://togakyo.github.io/Kotobamichi/`;
+  const n=getDayNum(),stars=calcStars();
+  const bar='🐾'.repeat(home)+'⬜'.repeat(Math.max(0,level.total-home));
+  const txt=`✏️ ことばみち · Kotobamichi  Day ${n}  ${'★'.repeat(stars)}${'☆'.repeat(3-stars)}\n${bar} ${home}/${level.total}\n🖊 ${Math.round(inkUsed)} ink · 🔥 ${save.daily.streak}\nhttps://togakyo.github.io/Kotobamichi/`;
   navigator.clipboard.writeText(txt).then(()=>toast(t('コピーしました！','Copied!')));
 });
 
@@ -492,7 +559,8 @@ document.getElementById('resetBtn').addEventListener('click',resetAttempt);
 const levelBtns=document.getElementById('levels');
 LEVELS.forEach((L,i)=>{
   const b=document.createElement('button');b.className='lvl';b.type='button';
-  b.textContent=i+1;b.setAttribute('aria-pressed',i===0);
+  b.innerHTML=`<span>${i+1}</span><span class="st" id="lvlstar${i}"></span>`;
+  b.setAttribute('aria-pressed',i===0);
   b.addEventListener('click',()=>{
     ensureAudio();dailyMode=false;
     document.getElementById('dailyBtn').classList.remove('active');
@@ -501,15 +569,20 @@ LEVELS.forEach((L,i)=>{
   });
   levelBtns.appendChild(b);
 });
+function updateLevelStars(){
+  LEVELS.forEach((_,i)=>{
+    const el=document.getElementById('lvlstar'+i);
+    if(el)el.textContent='★'.repeat(save.stars[i]|0);
+  });
+}
+updateLevelStars();
 
 document.getElementById('dailyBtn').addEventListener('click',()=>{
   ensureAudio();dailyMode=!dailyMode;
   document.getElementById('dailyBtn').classList.toggle('active',dailyMode);
   if(dailyMode){
-    const n=getDayNum();
-    document.getElementById('dayNum').textContent=n;
     document.getElementById('dayPill').style.display='';
-    levelBtns.style.display='none';loadLevel(n%LEVELS.length);
+    levelBtns.style.display='none';loadDaily();
   }else{
     document.getElementById('dayPill').style.display='none';
     levelBtns.style.display='';loadLevel(0);
@@ -522,23 +595,23 @@ document.getElementById('langBtn').addEventListener('click',()=>{
   document.documentElement.lang=lang;refreshUI();
 });
 function refreshUI(){
-  document.getElementById('langBtn').textContent=lang==='ja'?'🌐 EN':'🌐 日本語';
+  document.getElementById('langBtn').textContent=lang==='ja'?'EN':'日本語';
   document.getElementById('brandSub').textContent=t('ことばを かいて、みんなを おうちへ','Write words · Guide them home');
-  document.getElementById('lblArrived').textContent=t('とどいた','Arrived');
-  document.getElementById('lblFell').textContent=t('おちた','Fell');
-  document.getElementById('inkLabel').textContent=t('🖊 インク','🖊 Ink');
-  document.getElementById('resetBtn').textContent='🔄 '+t('やりなおす','Reset');
+  document.getElementById('resetBtn').title=t('やりなおす','Reset');
   document.getElementById('dailyBtn').textContent='📅 '+t('デイリー','Daily');
   document.getElementById('footer').innerHTML=t(
     'いきものは とまらず あるくよ。ゆびで ことばを かいて みちを つくり、おうちへ とどけよう。<br>'
-    +'赤い枠のことばは <b>コマンド</b> — いきものが ふれると、そのことばを よんで うごきが かわるよ。<br>'
-    +'うえの カードの ことばを タップすると、せかいの きまりが かわる。',
+    +'🔴 じるしの ことばは <b>コマンド</b> — いきものが ふれると、そのことばを よんで うごきが かわるよ。<br>'
+    +'うえの ことばを タップすると、せかいの きまりが かわる。デイリーは まいにち あたらしい みちが うまれるよ。',
     'Creatures never stop walking. Write words to build the world — guide them home.<br>'
-    +'Red-bordered words are <b>commands</b> — creatures read them on contact and obey.<br>'
-    +'Tap the highlighted words on the rule cards to change the laws of the world.'
+    +'Words marked with a 🔴 dot are <b>commands</b> — creatures read them on contact and obey.<br>'
+    +'Tap the highlighted words above to change the laws of the world. The Daily is a brand-new level every day.'
   );
   syncStartBtn();buildPalette();renderRules();
 }
+document.getElementById('helpBtn').addEventListener('click',()=>{
+  const h=document.getElementById('footer'); h.hidden=!h.hidden;
+});
 
 // ── Sound ─────────────────────────────────────────────────────────
 let audio=null;
