@@ -155,26 +155,32 @@ const rules={dir:1,grav:'normal'};
 const LEVELS=[
   { ja:'わたる',      en:'Cross',      dir:1, total:12, goal:8,  ink:1500,
     spawn:{x:70,y:352},  goalRect:{x:858,y:316,w:96,h:60},
+    fruits:[{x:400,y:300},{x:500,y:250},{x:600,y:300}],
     plats:[{x:-20,y:380,w:330,h:240,g:true},{x:690,y:380,w:350,h:240,g:true}] },
 
   { ja:'のりこえる',  en:'Climb',      dir:1, total:12, goal:8,  ink:1700,
     spawn:{x:70,y:222},  goalRect:{x:858,y:368,w:96,h:60},
+    fruits:[{x:350,y:230},{x:505,y:250},{x:640,y:330}],
     plats:[{x:-20,y:250,w:260,h:370,g:true},{x:470,y:300,w:70,h:320,g:true},{x:740,y:430,w:300,h:200,g:true}] },
 
   { ja:'むきをかえる',en:'Turn',       dir:1, total:10, goal:6,  ink:1500,
     spawn:{x:430,y:272}, goalRect:{x:30,y:320,w:96,h:60},
+    fruits:[{x:560,y:320},{x:250,y:300},{x:120,y:250}],
     plats:[{x:-20,y:384,w:180,h:240,g:true},{x:360,y:300,w:150,h:26,g:true}] },
 
   { ja:'くだる',      en:'Descend',    dir:1, total:10, goal:7,  ink:1600,
     spawn:{x:70,y:60},   goalRect:{x:858,y:470,w:96,h:60},
+    fruits:[{x:300,y:190},{x:450,y:230},{x:560,y:390}],
     plats:[{x:-20,y:90,w:220,h:20,g:true},{x:390,y:290,w:130,h:20,g:true},{x:680,y:500,w:360,h:130,g:true}] },
 
   { ja:'はなれ島',    en:'Islands',    dir:1, total:12, goal:8,  ink:2200,
     spawn:{x:70,y:170},  goalRect:{x:858,y:190,w:96,h:60},
+    fruits:[{x:250,y:220},{x:530,y:200},{x:770,y:170}],
     plats:[{x:-20,y:200,w:180,h:20,g:true},{x:330,y:270,w:140,h:20,g:true},{x:590,y:150,w:140,h:20,g:true},{x:810,y:220,w:230,h:410,g:true}] },
 
   { ja:'すれちがい',  en:'Crossroads', dir:1, total:10, goal:6,  ink:1400,
     spawn:{x:500,y:250}, goalRect:{x:46,y:316,w:96,h:60},
+    fruits:[{x:300,y:320},{x:480,y:180},{x:680,y:320}],
     plats:[{x:-20,y:380,w:260,h:250,g:true},{x:340,y:280,w:280,h:20,g:true},{x:740,y:380,w:310,h:250,g:true}] },
 ];
 let li=0,level=LEVELS[0];
@@ -208,15 +214,19 @@ function genDaily(n){
     plats.push({x:mx,y:my,w:mw,h:18+Math.floor(rnd()*30),g:true});
   }
   const total=10+Math.floor(rnd()*5);
+  const ink=1500+Math.floor(rnd()*1100);
+  const fruits=plats.slice(2).map(p=>({x:p.x+p.w/2,y:p.y-38}));
+  while(fruits.length<3)fruits.push({x:lw+80+Math.floor(rnd()*(span-160)),y:180+Math.floor(rnd()*200)});
+  fruits.length=3;
   return { ja:'デイリー #'+n, en:'Daily #'+n, dir:1,
-    total, goal:Math.max(5,Math.round(total*0.65)), ink:1500+Math.floor(rnd()*1100),
+    total, goal:Math.max(5,Math.round(total*0.65)), ink,
     spawn:{x:60,y:ly-28},
     goalRect:{x:Math.min(rx+30,W-116),y:ry-64,w:96,h:60},
-    plats };
+    fruits, plats };
 }
 
 // ── State ─────────────────────────────────────────────────────────
-let strokes=[],creatures=[],particles=[],inkUsed=0;
+let strokes=[],creatures=[],particles=[],inkUsed=0,fruitsGot=[];
 let running=false,spawned=0,spawnT=0,home=0,lost=0,won=false,gt=0;
 
 // ── Level management ──────────────────────────────────────────────
@@ -233,9 +243,10 @@ function updateStreakPill(){
   document.getElementById('streakN').textContent=save.daily.streak;
 }
 function applyLevel(L,i){
-  li=i; level=L;
+  li=i; level=L; level.fruits=level.fruits||[];
   rules.dir=level.dir; rules.grav='normal';
   strokes=[]; creatures=[]; particles=[]; inkUsed=0;
+  fruitsGot=level.fruits.map(()=>false);
   running=false; spawned=0; spawnT=0; home=0; lost=0; won=false;
   document.getElementById('goalN').textContent=level.goal;
   document.getElementById('shareBtn').style.display='none';
@@ -246,6 +257,7 @@ function applyLevel(L,i){
 }
 function resetAttempt(){
   creatures=[]; particles=[]; running=false; spawned=0; spawnT=0; home=0; lost=0; won=false;
+  fruitsGot=level.fruits.map(()=>false);
   document.getElementById('shareBtn').style.display='none';
   document.getElementById('banner').classList.remove('show');
   updateHUD(); syncStartBtn();
@@ -324,10 +336,23 @@ canvas.addEventListener('pointercancel',endDraw);
 
 // ── Creatures ─────────────────────────────────────────────────────
 const COLORS=['#ff8a5c','#ffd166','#7fc7ff','#9ad36a','#ff9fd0','#c4a0ff'];
+// Hats unlock at lifetime-delivered milestones; creatures wear them at random
+const HATS=[{n:10,id:'cap'},{n:25,id:'bow'},{n:50,id:'sprout'},{n:100,id:'crown'}];
+function pickHat(){
+  const u=HATS.filter(h=>(save.total|0)>=h.n);
+  if(!u.length||Math.random()<0.35)return null;
+  return u[Math.floor(Math.random()*u.length)].id;
+}
+function checkHatUnlock(){
+  for(const h of HATS)if(save.total===h.n)
+    toast(t('🎉 '+h.n+'ひき とどけた！ あたらしい ぼうしを ゲット！','🎉 '+h.n+' delivered — new hat unlocked!'));
+  persist();
+}
 function spawnOne(){
   creatures.push({x:level.spawn.x,y:level.spawn.y,vx:rules.dir*WALK,vy:0,dir:rules.dir,
     col:COLORS[spawned%COLORS.length],step:Math.random()*6.28,ground:false,
-    turnCD:0,jumpCD:0,boostTimer:0});
+    turnCD:0,jumpCD:0,boostTimer:0,
+    hat:pickHat(),blinkT:1+Math.random()*3,land:0,wasGround:false,stepA:0});
   spawned++;
 }
 
@@ -345,6 +370,9 @@ function physics(dt){
     if(c.turnCD>0)c.turnCD-=dt;
     if(c.jumpCD>0)c.jumpCD-=dt;
     if(c.boostTimer>0)c.boostTimer-=dt;
+    c.blinkT-=dt; if(c.blinkT<-0.12)c.blinkT=2+Math.random()*3;
+    if(c.land>0)c.land-=dt;
+    if(c.stepA>0)c.stepA-=dt;
     for(let k=0;k<SUB;k++){
       c.vy+=g*s; c.vy=clamp(c.vy,-600,600); c.vx=clamp(c.vx,-600,600);
       c.x+=c.vx*s; c.y+=c.vy*s;
@@ -370,7 +398,13 @@ function physics(dt){
           const cp=closestOnSeg(c.x,c.y,a.x,a.y,b.x,b.y);
           let dx=c.x-cp.x,dy=c.y-cp.y,d=Math.hypot(dx,dy);
           if(d<RR&&d>0.001){
-            hit(dx/d,dy/d,RR-d,st.mat,rest);
+            const nx=dx/d,ny=dy/d;
+            // step assist: a frontal contact at foot level is a stroke tip —
+            // hop over it, and keep skipping the velocity correction while climbing
+            if(nx*c.dir<-0.5&&cp.y>c.y-R&&(c.wasGround||c.stepA>0)){
+              c.vy=Math.min(c.vy,-260); c.stepA=0.25;
+            }
+            else hit(nx,ny,RR-d,st.mat,rest);
             if(st.mat==='turn'&&c.turnCD<=0){
               c.dir*=-1; c.vx*=-0.4; c.turnCD=0.7;
               if(k===0)wordPop(c.x,c.y,t('もどれ！','Turn!'));
@@ -394,11 +428,18 @@ function physics(dt){
       }
       c.ground=grounded;
     }
+    if(c.ground&&!c.wasGround)c.land=0.16;
+    c.wasGround=c.ground;
+    for(let f=0;f<level.fruits.length;f++){
+      if(!fruitsGot[f]&&Math.hypot(c.x-level.fruits[f].x,c.y-level.fruits[f].y)<20){
+        fruitsGot[f]=true;burst(level.fruits[f].x,level.fruits[f].y,'✨');blip(1150,0.05);
+      }
+    }
     c.step+=dt*(c.ground?10:3);
   }
   for(let i=creatures.length-1;i>=0;i--){
     const c=creatures[i],gr=level.goalRect;
-    if(c.x>gr.x&&c.x<gr.x+gr.w&&c.y>gr.y-6&&c.y<gr.y+gr.h){home++;burst(c.x,c.y,'🎉');creatures.splice(i,1);updateHUD();continue;}
+    if(c.x>gr.x&&c.x<gr.x+gr.w&&c.y>gr.y-6&&c.y<gr.y+gr.h){home++;save.total=(save.total|0)+1;checkHatUnlock();burst(c.x,c.y,'🎉');creatures.splice(i,1);updateHUD();continue;}
     if(c.y>H+50||c.x<-60||c.x>W+60){lost++;creatures.splice(i,1);updateHUD();}
   }
   if(!won&&home>=level.goal){won=true;running=false;showBanner(true);}
@@ -411,11 +452,36 @@ function wordPop(x,y,txt){particles.push({type:'w',x,y,vx:(Math.random()-.5)*25,
 function updateParticles(dt){for(let i=particles.length-1;i>=0;i--){const p=particles[i];p.life-=dt;p.vy+=260*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;if(p.life<=0)particles.splice(i,1);}}
 
 // ── Render ────────────────────────────────────────────────────────
+const CLOUDS=[{y:70,s:15,v:7},{y:125,s:11,v:11},{y:45,s:9,v:15}];
 function bg(){
   ctx.fillStyle='#f6efe0';ctx.fillRect(0,0,W,H);
   ctx.strokeStyle='#e4ead4';ctx.lineWidth=1;
   for(let x=0;x<=W;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   for(let y=0;y<=H;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.fillStyle='rgba(213,197,160,.30)';
+  ctx.beginPath();ctx.ellipse(210,H+40,270,120,0,0,6.28);ctx.fill();
+  ctx.beginPath();ctx.ellipse(720,H+50,330,150,0,0,6.28);ctx.fill();
+  for(let i=0;i<CLOUDS.length;i++){
+    const cl=CLOUDS[i],x=((reduce?i*300:gt*cl.v)+i*380)%(W+240)-120;
+    ctx.fillStyle='rgba(255,255,255,.55)';
+    ctx.beginPath();ctx.arc(x,cl.y,cl.s,0,6.28);ctx.arc(x+cl.s,cl.y+4,cl.s*.8,0,6.28);ctx.arc(x-cl.s,cl.y+4,cl.s*.75,0,6.28);ctx.fill();
+  }
+}
+const FRUIT_EMO=['🍓','🍎','🍊'];
+function drawFruits(){
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  for(let i=0;i<level.fruits.length;i++){
+    if(fruitsGot[i])continue;
+    const f=level.fruits[i];
+    ctx.font='19px serif';
+    ctx.fillText(FRUIT_EMO[i%3],f.x,f.y+(reduce?0:Math.sin(gt*2.2+i*2)*3));
+  }
+  for(let i=0;i<level.fruits.length;i++){
+    ctx.globalAlpha=fruitsGot[i]?1:0.22;
+    ctx.font='15px serif';
+    ctx.fillText(FRUIT_EMO[i%3],22+i*22,22);
+  }
+  ctx.globalAlpha=1;
 }
 function rr(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
 function platforms(){
@@ -466,19 +532,45 @@ function drawDoor(){
   ctx.fillStyle='#8a6b46';rr(x-20,sy-30,40,34,10);ctx.fill();
   ctx.fillStyle='#3a3340';ctx.beginPath();ctx.ellipse(x,sy-6,15,14,0,Math.PI,0,true);ctx.fill();
 }
+function drawHat(c,x,topY){
+  if(c.hat==='cap'){
+    ctx.fillStyle='#e0523f';ctx.beginPath();ctx.arc(x,topY+2,7,Math.PI,0);ctx.fill();
+    ctx.fillRect(x-(c.dir>0?1:9),topY+1,10,2.5);
+  }else if(c.hat==='bow'){
+    ctx.fillStyle='#ff9fd0';ctx.beginPath();ctx.arc(x-4,topY,3.5,0,6.28);ctx.arc(x+4,topY,3.5,0,6.28);ctx.fill();
+    ctx.fillStyle='#e06fa8';ctx.beginPath();ctx.arc(x,topY,2,0,6.28);ctx.fill();
+  }else if(c.hat==='sprout'){
+    ctx.strokeStyle='#5d9c4b';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x,topY+2);ctx.lineTo(x,topY-4);ctx.stroke();
+    ctx.fillStyle='#7fbf6a';ctx.beginPath();ctx.ellipse(x+4,topY-5,4,2.5,-0.5,0,6.28);ctx.fill();
+  }else if(c.hat==='crown'){
+    ctx.fillStyle='#ffce5c';ctx.beginPath();
+    ctx.moveTo(x-7,topY+3);ctx.lineTo(x-7,topY-4);ctx.lineTo(x-3.5,topY);ctx.lineTo(x,topY-5);
+    ctx.lineTo(x+3.5,topY);ctx.lineTo(x+7,topY-4);ctx.lineTo(x+7,topY+3);ctx.closePath();ctx.fill();
+  }
+}
 function drawCreature(c){
-  const bob=c.ground?Math.abs(Math.sin(c.step))*2:0,cy=c.y-bob;
+  const bob=c.ground?Math.abs(Math.sin(c.step))*2:0;
+  const sq=c.land>0?c.land/0.16:0,sx=1+0.26*sq,sy=1-0.26*sq;
+  const cy=c.y-bob+R*(1-sy);
   if(c.boostTimer>0){ctx.globalAlpha=0.35;ctx.fillStyle='#ffce5c';ctx.beginPath();ctx.arc(c.x,cy,R+5,0,6.28);ctx.fill();ctx.globalAlpha=1;}
   ctx.fillStyle='#5a4a3a';ctx.beginPath();ctx.arc(c.x-4,c.y+R-2,3,0,6.28);ctx.fill();ctx.beginPath();ctx.arc(c.x+4,c.y+R-2,3,0,6.28);ctx.fill();
-  ctx.fillStyle=c.col;ctx.beginPath();ctx.arc(c.x,cy,R,0,6.28);ctx.fill();
+  ctx.fillStyle=c.col;ctx.beginPath();ctx.ellipse(c.x,cy,R*sx,R*sy,0,0,6.28);ctx.fill();
   ctx.fillStyle='rgba(255,255,255,.25)';ctx.beginPath();ctx.arc(c.x-3,cy-3,R*0.4,0,6.28);ctx.fill();
   const ex=c.dir>0?2:-2,ep=c.dir>0?1:-1;
-  ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(c.x-3+ex,cy-1,3,0,6.28);ctx.arc(c.x+4+ex,cy-1,3,0,6.28);ctx.fill();
-  ctx.fillStyle='#3a3340';ctx.beginPath();ctx.arc(c.x-3+ex+ep,cy-1,1.5,0,6.28);ctx.arc(c.x+4+ex+ep,cy-1,1.5,0,6.28);ctx.fill();
+  if(c.blinkT<0){
+    ctx.strokeStyle='#3a3340';ctx.lineWidth=1.6;
+    ctx.beginPath();ctx.moveTo(c.x-5+ex,cy-1);ctx.lineTo(c.x-1+ex,cy-1);
+    ctx.moveTo(c.x+2+ex,cy-1);ctx.lineTo(c.x+6+ex,cy-1);ctx.stroke();
+  }else{
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(c.x-3+ex,cy-1,3,0,6.28);ctx.arc(c.x+4+ex,cy-1,3,0,6.28);ctx.fill();
+    ctx.fillStyle='#3a3340';ctx.beginPath();ctx.arc(c.x-3+ex+ep,cy-1,1.5,0,6.28);ctx.arc(c.x+4+ex+ep,cy-1,1.5,0,6.28);ctx.fill();
+  }
+  if(!c.ground&&c.vy>260){ctx.fillStyle='#3a3340';ctx.beginPath();ctx.arc(c.x+ex,cy+4,1.8,0,6.28);ctx.fill();}
+  if(c.hat)drawHat(c,c.x,cy-R*sy);
 }
 function render(){
   ctx.clearRect(0,0,W,H);
-  bg();platforms();drawGoal();drawDoor();drawStrokes();
+  bg();platforms();drawGoal();drawDoor();drawStrokes();drawFruits();
   for(const c of creatures)drawCreature(c);
   for(const p of particles){
     if(p.type==='e'){ctx.globalAlpha=clamp(p.life*1.6,0,1);ctx.font='20px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.emo,p.x,p.y);}
@@ -521,11 +613,14 @@ function showBanner(win){
     }else if(li>=0&&stars>(save.stars[li]|0)){
       save.stars[li]=stars;persist();updateLevelStars();
     }
-    document.getElementById('bannerTitle').textContent=t('クリア！🎉','Clear! 🎉');
-    document.getElementById('bannerSub').textContent='★'.repeat(stars)+'☆'.repeat(3-stars)+'  '+home+t('ひき とどいた',' delivered')+extra;
+    const fr=fruitsGot.filter(Boolean).length,frMax=level.fruits.length;
+    const perfect=stars===3&&frMax>0&&fr===frMax;
+    document.getElementById('bannerTitle').textContent=perfect?t('パーフェクト！🌟','Perfect! 🌟'):t('クリア！🎉','Clear! 🎉');
+    document.getElementById('bannerSub').textContent='★'.repeat(stars)+'☆'.repeat(3-stars)
+      +(frMax?'  🍓'+fr+'/'+frMax:'')+'  '+home+t('ひき とどいた',' delivered')+extra;
     document.getElementById('bannerBtn').textContent=!dailyMode&&li>=0&&li<LEVELS.length-1?t('つぎへ ▶','Next ▶'):t('もういちど ↻','Play again ↻');
     if(dailyMode)shareBtn.style.display='';
-    blip(660);setTimeout(()=>blip(880),120);
+    (perfect?[523,659,784,1047,1319]:[523,659,784,1047]).forEach((f,i)=>setTimeout(()=>blip(f,0.05),i*95));
   }else{
     document.getElementById('bannerTitle').textContent=t('もうすこし！','So close!');
     document.getElementById('bannerSub').textContent=t('とどいた ','Delivered ')+home+'/'+level.goal;
@@ -537,9 +632,9 @@ document.getElementById('bannerBtn').addEventListener('click',()=>{
   if(won&&!dailyMode&&li>=0&&li<LEVELS.length-1)loadLevel(li+1); else resetAttempt();
 });
 document.getElementById('shareBtn').addEventListener('click',()=>{
-  const n=getDayNum(),stars=calcStars();
+  const n=getDayNum(),stars=calcStars(),fr=fruitsGot.filter(Boolean).length;
   const bar='🐾'.repeat(home)+'⬜'.repeat(Math.max(0,level.total-home));
-  const txt=`✏️ ことばみち · Kotobamichi  Day ${n}  ${'★'.repeat(stars)}${'☆'.repeat(3-stars)}\n${bar} ${home}/${level.total}\n🖊 ${Math.round(inkUsed)} ink · 🔥 ${save.daily.streak}\nhttps://togakyo.github.io/Kotobamichi/`;
+  const txt=`✏️ ことばみち · Kotobamichi  Day ${n}  ${'★'.repeat(stars)}${'☆'.repeat(3-stars)}\n${bar} ${home}/${level.total}\n🍓 ${fr}/${level.fruits.length} · 🖊 ${Math.round(inkUsed)} ink · 🔥 ${save.daily.streak}\nhttps://togakyo.github.io/Kotobamichi/`;
   navigator.clipboard.writeText(txt).then(()=>toast(t('コピーしました！','Copied!')));
 });
 

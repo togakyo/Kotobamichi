@@ -18,6 +18,8 @@ It runs as a single static HTML file, so you can publish it directly on GitHub P
 - Ink is limited. Use **Undo / Clear** to redraw.
 - Lines are made of **word-materials**: solid / slippery / bouncy, plus **command words** (marked 🔴) that creatures read and obey on contact — `Turn`, `Jump`, `Fast`.
 - Clear levels to earn **★1–3** (deliver everyone for ★3). Stars are saved in your browser.
+- **🍓 Fruits**: each level hides 3 fruits — route creatures through them. Collect all + ★3 for a **Perfect**.
+- **🎩 Hats**: lifetime delivery milestones (10 / 25 / 50 / 100) unlock hats that creatures randomly wear.
 - **📅 Daily**: a brand-new, procedurally generated level every day — same level for everyone. Clear it daily to grow your 🔥 streak, and share your result as an emoji grid.
 
 ### Design Notes
@@ -90,6 +92,8 @@ MIT License. Free to modify and redistribute. See [LICENSE](LICENSE) for details
 - インクは有限。**もどす / けす** で引き直せる。
 - 線は「ことばの素材」でできている: ふつう / つるつる / ぽよん、さらに 🔴 じるしの **コマンドことば**(`もどれ` `とべ` `はやく`)は、いきものが触れると読んで従う。
 - クリアすると **★1〜3** がもらえる(全員届けると★3)。★はブラウザに保存される。
+- **🍓 フルーツ**: 各レベルに3つかくれている。いきものの通り道を工夫して集めよう。全部+★3で**パーフェクト**。
+- **🎩 ぼうし**: 累計で届けた数(10・25・50・100ひき)でぼうしが解放され、いきものがランダムにかぶって登場する。
 - **📅 デイリー**: 毎日自動生成される新しいレベル(みんな同じ面)。毎日クリアで 🔥 連続記録が伸び、結果を絵文字グリッドでシェアできる。
 
 ### このゲームの設計メモ
